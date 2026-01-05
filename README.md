@@ -2,6 +2,35 @@
 
 Ecode/Decode msgpack as jakarta-json instances
 
+## Add dependency
+
+### Maven
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <dependencies>
+        <dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+        <!-- You need a jakarta.json-api implementation -->
+		<dependency>
+			<groupId>org.eclipse.parsson</groupId>
+			<artifactId>parsson</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+
+        <dependency>
+			<groupId>at.bestsolution</groupId>
+			<artifactId>msgpack-jakarta-json</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+    </dependencies>
+</project>
+```
+
 ## Usage
 
 ### Basic useage
