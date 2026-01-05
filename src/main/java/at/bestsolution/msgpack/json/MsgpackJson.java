@@ -80,11 +80,11 @@ public class MsgpackJson {
      */
     public JsonValue decode(MessageUnpacker unpacker) throws IOException {
         MessageFormat format = unpacker.getNextFormat();
-        switch (format.getValueType()) {
-            case MAP:
+        return switch (format.getValueType()) {
+            case MAP -> {
                 var mapSize = unpacker.unpackMapHeader();
                 if (mapSize == 0) {
-                    return JsonValue.EMPTY_JSON_OBJECT;
+                    yield JsonValue.EMPTY_JSON_OBJECT;
                 }
                 var objBuilder = Json.createObjectBuilder();
                 for (int i = 0; i < mapSize; i++) {
@@ -92,53 +92,59 @@ public class MsgpackJson {
                     var value = decode(unpacker);
                     objBuilder.add(key, value);
                 }
-                return objBuilder.build();
-            case ARRAY:
+                yield objBuilder.build();
+            }
+            case ARRAY -> {
                 var arraySize = unpacker.unpackArrayHeader();
                 if (arraySize == 0) {
-                    return JsonValue.EMPTY_JSON_ARRAY;
+                    yield JsonValue.EMPTY_JSON_ARRAY;
                 }
                 var arrBuilder = jakarta.json.Json.createArrayBuilder();
                 for (int i = 0; i < arraySize; i++) {
                     var value = decode(unpacker);
                     arrBuilder.add(value);
                 }
-                return arrBuilder.build();
-            case STRING:
+                yield arrBuilder.build();
+            }
+            case STRING -> {
                 var str = unpacker.unpackString();
                 var rv = stringCache != null ? stringCache.get(str) : null;
-                return rv != null ? rv : Json.createValue(str);
-            case INTEGER:
+                yield rv != null ? rv : Json.createValue(str);
+            }
+            case INTEGER -> {
                 if (format == MessageFormat.UINT64) {
                     var ul = unpacker.unpackBigInteger();
-                    return Json.createValue(ul);
+                    yield Json.createValue(ul);
                 }
 
                 var l = unpacker.unpackLong();
                 if (l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
-                    return number((int) l);
+                    yield number((int) l);
                 } else {
-                    return number(l);
+                    yield number(l);
                 }
-            case FLOAT:
+            }
+            case FLOAT -> {
                 var d = unpacker.unpackDouble();
-                return Json.createValue(d);
-            case BOOLEAN:
+                yield Json.createValue(d);
+            }
+            case BOOLEAN -> {
                 var b = unpacker.unpackBoolean();
-                return b ? JsonValue.TRUE : JsonValue.FALSE;
-            case NIL:
+                yield b ? JsonValue.TRUE : JsonValue.FALSE;
+            }
+            case NIL -> {
                 unpacker.unpackNil();
-                return JsonValue.NULL;
-            case BINARY:
+                yield JsonValue.NULL;
+            }
+            case BINARY -> {
                 var data = unpacker.unpackBinaryHeader() > 0 ? unpacker.readPayload(unpacker.unpackBinaryHeader())
                         : new byte[0];
                 var base64 = Base64.getEncoder().encodeToString(data);
-                return Json.createValue(base64);
-            case EXTENSION:
+                yield Json.createValue(base64);
+            }
+            case EXTENSION ->
                 throw new IOException("Extension types are not supported");
-            default:
-                throw new IOException("Unknown MessagePack format: " + format);
-        }
+        };
     }
 
     /**
