@@ -1,0 +1,8 @@
+{
+    "cachedStrings": ["hello", "hello", "world", "world"],
+    "notCachedStrings": [
+        "this is a long string that is not cached"
+        , "this is a long string that is not cached"
+        , "another long string that exceeds the cache limit"
+        , "another long string that exceeds the cache limit"]
+}

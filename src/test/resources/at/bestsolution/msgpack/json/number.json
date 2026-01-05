@@ -1,0 +1,4 @@
+{
+    "cachedNumbers": [1, -1, 1, -1],
+    "notCachedNumbers": [1000, 1000, -1000, -1000]
+}

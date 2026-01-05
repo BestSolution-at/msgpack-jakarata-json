@@ -1,2 +1,3 @@
 # msgpack-jakarata-json
-Expose msgpack as jakarta-json
+
+Ecode/Decode msgpack as jakarta-json instances

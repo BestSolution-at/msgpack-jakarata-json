@@ -1,0 +1,28 @@
+{
+	"firstname": "John",
+	"lastname": "Doe",
+	"age": 30,
+	"address": {
+		"street": "123 Main St",
+		"city": "Anytown",
+		"state": "CA",
+		"postalCode": "12345"
+	},
+	"shoeSize": 10.5,
+	"isEmployed": true,
+	"nickname": null,
+	"phoneNumbers": [
+		{
+			"type": "HOME",
+			"number": "555-1234"
+		},
+        {
+			"type": "HOME",
+			"number": "111-1234"
+		},
+		{
+			"type": "WORK",
+			"number": "555-5678"
+		}
+	]
+}
