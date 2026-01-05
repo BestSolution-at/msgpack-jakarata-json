@@ -166,9 +166,9 @@ public class MsgpackJson {
      */
     public void encode(MessagePacker packer, JsonValue value) throws IOException {
         if (value.getValueType() == JsonValue.ValueType.STRING) {
-            packer.packString(((jakarta.json.JsonString) value).getString());
+            packer.packString(((JsonString) value).getString());
         } else if (value.getValueType() == JsonValue.ValueType.NUMBER) {
-            var num = (jakarta.json.JsonNumber) value;
+            var num = (JsonNumber) value;
             if (num.isIntegral()) {
                 try {
                     var l = num.longValueExact();
