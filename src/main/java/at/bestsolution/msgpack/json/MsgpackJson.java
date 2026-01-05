@@ -45,6 +45,11 @@ public class MsgpackJson {
             return this;
         }
 
+        /**
+         * Builds the MsgpackJson instance with the configured settings.
+         * 
+         * @return the mspack instance
+         */
         public MsgpackJson build() {
             return new MsgpackJson(stringCache);
         }
