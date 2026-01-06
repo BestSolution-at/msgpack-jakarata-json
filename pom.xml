@@ -36,7 +36,7 @@
 	</licenses>
 
 	<properties>
-		<revision>1.0.0-SNAPSHOT</revision>
+		<revision>999.0.0-SNAPSHOT</revision>
 
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
