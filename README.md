@@ -36,6 +36,7 @@ Ecode/Decode msgpack as jakarta-json instances
 ### Basic useage
 
 ```java
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.InputStream;
 
@@ -48,7 +49,7 @@ import at.bestsolution.msgpack.json.MsgpackJson
 
 public class Sample {
     ...
-    public static void serialize(OutputStream stream, JsonValue value) {
+    public static void serialize(OutputStream stream, JsonValue value) throws IOException {
         var packer = MessagePack.newDefaultBufferPacker(stream);
         var msgpackJson = MsgpackJson.builder().build();
         msgpackJson.encode(packer, value);
@@ -56,7 +57,7 @@ public class Sample {
         packer.flush(); 
     }
 
-    public static JsonValue deserialize(InputStream stream) {
+    public static JsonValue deserialize(InputStream stream) throws IOException {
         var unpacker = MessagePack.newDefaultUnpacker(stream);
         var msgpackJson = MsgpackJson.builder().build();
         return msgpackJson.decode(unpacker);
