@@ -25,7 +25,7 @@ Ecode/Decode msgpack as jakarta-json instances
         <dependency>
 			<groupId>at.bestsolution</groupId>
 			<artifactId>msgpack-jakarta-json</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
     </dependencies>
 </project>
