@@ -40,7 +40,7 @@ public class MsgpackJson {
          */
         public Builder cachedStrings(Set<String> stringCache) {
             this.stringCache = stringCache.stream()
-                    .collect(java.util.stream.Collectors.toMap(s -> s,
+                    .collect(java.util.stream.Collectors.toUnmodifiableMap(s -> s,
                             s -> Json.createValue(s)));
             return this;
         }
@@ -231,7 +231,7 @@ public class MsgpackJson {
             int idx = (int) l + 128;
             JsonNumber cached = CACHE[idx];
             if (cached == null) {
-                cached = Json.createValue(l);
+                cached = Json.createValue((int) l);
                 CACHE[idx] = cached;
             }
             return cached;
