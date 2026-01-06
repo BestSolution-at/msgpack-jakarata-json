@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
@@ -140,6 +141,7 @@ public class MsgpackJsonTests {
                 .build();
         var packer = MessagePack.newDefaultBufferPacker();
         var value = Json.createArrayBuilder()
+                .addNull()
                 .add(true)
                 .add(1.01)
                 .add(Long.MAX_VALUE)
@@ -154,14 +156,37 @@ public class MsgpackJsonTests {
         var unpacker = MessagePack.newDefaultUnpacker(encodedJson);
         var decodedJson = msgpackJson.decode(unpacker).asJsonArray();
         unpacker.close();
-        assertSame(JsonValue.TRUE, decodedJson.get(0));
-        assertEquals(1.01, decodedJson.getJsonNumber(1).doubleValue());
-        assertEquals(Long.MAX_VALUE, decodedJson.getJsonNumber(2).longValueExact());
-        assertEquals(Integer.MAX_VALUE, decodedJson.getJsonNumber(3).intValueExact());
-        assertThrows(ArithmeticException.class, () -> decodedJson.getJsonNumber(4).longValueExact());
+        assertSame(JsonValue.NULL, decodedJson.get(0));
+        assertSame(JsonValue.TRUE, decodedJson.get(1));
+        assertEquals(1.01, decodedJson.getJsonNumber(2).doubleValue());
+        assertEquals(Long.MAX_VALUE, decodedJson.getJsonNumber(3).longValueExact());
+        assertEquals(Integer.MAX_VALUE, decodedJson.getJsonNumber(4).intValueExact());
+        assertThrows(ArithmeticException.class, () -> decodedJson.getJsonNumber(5).longValueExact());
         assertEquals(BigInteger.valueOf(Long.MAX_VALUE).add(new BigInteger("1")),
-                decodedJson.getJsonNumber(4).bigIntegerValue());
-        assertEquals("Foo", decodedJson.getJsonString(5).getString());
+                decodedJson.getJsonNumber(5).bigIntegerValue());
+        assertEquals("Foo", decodedJson.getJsonString(6).getString());
+    }
+
+    @Test
+    public void struct() throws IOException {
+        var msgpackJson = MsgpackJson.builder()
+                .build();
+        var packer = MessagePack.newDefaultBufferPacker();
+        var value = Json.createObjectBuilder()
+                .add("key1", "value1")
+                .add("key2", 100)
+                .add("key3", true)
+                .build();
+        msgpackJson.encode(packer, value);
+        packer.flush();
+        packer.close();
+        var encodedJson = packer.toByteArray();
+        var unpacker = MessagePack.newDefaultUnpacker(encodedJson);
+        var decodedJson = msgpackJson.decode(unpacker).asJsonObject();
+        unpacker.close();
+        assertEquals("value1", decodedJson.getString("key1"));
+        assertEquals(100, decodedJson.getJsonNumber("key2").intValue());
+        assertEquals(JsonValue.TRUE, decodedJson.get("key3"));
     }
 
     @Test
