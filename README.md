@@ -1,6 +1,6 @@
 # msgpack-jakarata-json
 
-Ecode/Decode msgpack as jakarta-json instances
+Ecode/Decode [msgpack](https://msgpack.org/) as jakarta-json instances
 
 ## Add dependency
 
